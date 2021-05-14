@@ -40,9 +40,11 @@ public:
     void handleMidiEvent(uint8_t status, uint8_t data1, uint8_t data2) override {
         if (status == 0x90) {
             // Note On
+            //tsf_bank_note_on(mTsf, bankIndex, presetIndex, data1, data2 / 255.0);
             tsf_note_on(mTsf, presetIndex, data1, data2 / 255.0);
         } else if (status == 0x80) {
             // Note Off
+            //tsf_bank_note_off(mTsf, bankIndex, presetIndex, data1);
             tsf_note_off(mTsf, presetIndex, data1);
         }
     }

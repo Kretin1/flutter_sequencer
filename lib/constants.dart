@@ -13,3 +13,6 @@ const LEAD_FRAMES = 1024;
 
 /// The patch number to select from a sf2 file.
 const DEFAULT_PATCH_NUMBER = 0;
+
+/// The bank number to select from a sf2 file.
+const DEFAULT_BANK_NUMBER = 0;

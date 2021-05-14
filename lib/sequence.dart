@@ -341,7 +341,11 @@ class Sequence {
 
     if (instrument is Sf2Instrument) {
       id = await NativeBridge.addTrackSf2(instrument.idOrPath, instrument.isAsset, instrument.presetIndex);
-    } else if (instrument is SfzInstrument) {
+    }
+    // else if (instrument is Sf2Channel) {
+    //   id = await NativeBridge.addTrackSf2(instrument.idOrPath, instrument.isAsset, instrument.presetIndex);
+    // }
+    else if (instrument is SfzInstrument) {
       final parseResult = await parseSfz(instrument.idOrPath, instrument.isAsset);
       final samplerInstrument =
       SamplerInstrument(

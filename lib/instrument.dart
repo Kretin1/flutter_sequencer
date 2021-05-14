@@ -6,8 +6,9 @@ abstract class Instrument  {
   final String idOrPath;
   final bool isAsset;
   final int presetIndex;
+  final int bankIndex;
 
-  Instrument(this.idOrPath, this.isAsset, { this.presetIndex = DEFAULT_PATCH_NUMBER });
+  Instrument(this.idOrPath, this.isAsset, { this.presetIndex = DEFAULT_PATCH_NUMBER, this.bankIndex = DEFAULT_BANK_NUMBER });
 
   String get displayName {
     return idOrPath.split(RegExp('[\\\\/]')).last;
@@ -35,6 +36,13 @@ class Sf2Instrument extends Instrument {
   Sf2Instrument({ String path, bool isAsset, int presetIndex = DEFAULT_PATCH_NUMBER })
     : super(path, isAsset, presetIndex: presetIndex);
 }
+
+/// Describes a channel for an existing SF2 track - played by the SoundFont
+/// player for the current platform.
+// class Sf2Channel extends Instrument {
+//   Sf2Channel({ String path, bool isAsset, int presetIndex = DEFAULT_PATCH_NUMBER, int bankIndex = DEFAULT_BANK_NUMBER })
+//       : super(path, isAsset, presetIndex: presetIndex, bankIndex: bankIndex);
+// }
 
 /// Describes an AudioUnit instrument (Apple platforms only.)
 class AudioUnitInstrument extends Instrument {
