@@ -9,6 +9,7 @@ MidiEventData::MidiEventData(uint8_t* data) {
     this->midiStatus = *data;
     this->midiData1 = *(data + 1);
     this->midiData2 = *(data + 2);
+    this->midiChannel = *(data + 3);
 }
 
 VolumeEventData::VolumeEventData(uint8_t* data) {

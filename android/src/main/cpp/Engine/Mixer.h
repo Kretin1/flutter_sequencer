@@ -82,7 +82,7 @@ public:
                 // } else if (midiEvent.midiStatus == 128) {
                 //     LOGI("Track %i: note off %i", trackIndex, midiEvent.midiData1);
                 // }
-                track.value()->handleMidiEvent(midiEvent.midiStatus, midiEvent.midiData1, midiEvent.midiData2);
+                track.value()->handleMidiEvent(midiEvent.midiStatus, midiEvent.midiData1, midiEvent.midiData2, midiEvent.midiChannel);
             }
         }
     }

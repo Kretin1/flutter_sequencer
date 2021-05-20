@@ -25,6 +25,7 @@ public:
     uint8_t midiStatus;
     uint8_t midiData1;
     uint8_t midiData2;
+    uint8_t midiChannel;
 };
 
 class VolumeEventData {

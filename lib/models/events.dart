@@ -42,11 +42,13 @@ class MidiEvent extends SchedulerEvent {
     @required this.midiStatus,
     @required this.midiData1,
     @required this.midiData2,
+    this.midiChannel = 0,
   }) : super(beat: beat, type: SchedulerEvent.MIDI_EVENT);
 
   final int midiStatus;
   final int midiData1;
   final int midiData2;
+  final int midiChannel;
 
   @override
   ByteData serializeBytes(int sampleRate, double tempo, int correctionFrames) {
@@ -55,6 +57,7 @@ class MidiEvent extends SchedulerEvent {
     data.setUint8(SCHEDULER_EVENT_DATA_OFFSET, midiStatus);
     data.setUint8(SCHEDULER_EVENT_DATA_OFFSET + 1, midiData1);
     data.setUint8(SCHEDULER_EVENT_DATA_OFFSET + 2, midiData2);
+    data.setUint8(SCHEDULER_EVENT_DATA_OFFSET + 3, midiChannel);
 
     return data;
   }
@@ -63,6 +66,7 @@ class MidiEvent extends SchedulerEvent {
     @required double beat,
     @required int noteNumber,
     @required int velocity,
+    int channel = 0,
   }) {
     if (velocity > 127 || velocity < 0) throw 'Velocity must be in range 0-127';
 
@@ -71,18 +75,21 @@ class MidiEvent extends SchedulerEvent {
       midiStatus: 144,
       midiData1: noteNumber,
       midiData2: velocity,
+      midiChannel: channel,
     );
   }
 
   static MidiEvent ofNoteOff({
     @required double beat,
     @required int noteNumber,
+    int channel = 0,
   }) {
     return MidiEvent(
       beat: beat,
       midiStatus: 128,
       midiData1: noteNumber,
       midiData2: 0,
+      midiChannel: channel,
     );
   }
 }

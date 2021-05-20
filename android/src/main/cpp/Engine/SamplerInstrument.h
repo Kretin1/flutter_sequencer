@@ -70,7 +70,8 @@ public:
         }
     }
 
-    void handleMidiEvent(uint8_t status, uint8_t data1, uint8_t data2) override {
+    void handleMidiEvent(uint8_t status, uint8_t data1, uint8_t data2, uint8_t channel) override {
+
         if (status == 0x90) {
             // Note On
             mSampler->playNote(data1, data2);

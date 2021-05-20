@@ -44,6 +44,50 @@ class Track {
     NativeBridge.handleEventsNow(id, [event], Sequence.globalState.sampleRate, sequence.tempo);
   }
 
+  /// Handles a Note On event on this track immediately.
+  /// The event will not be added to this track's events.
+  void addNoteOn({ int noteNumber, double velocity }) {
+    final nextBeat = sequence.getBeat();
+    final event = MidiEvent.ofNoteOn(beat: nextBeat, noteNumber: noteNumber, velocity: _velocityToMidi(velocity));
+
+    _addEvent(event);
+  }
+
+  /// Handles a Note Off event on this track immediately.
+  /// The event will not be added to this track's events.
+  void addNoteOff({ int noteNumber }) {
+    final nextBeat = sequence.getBeat();
+    final event = MidiEvent.ofNoteOff(beat: nextBeat, noteNumber: noteNumber);
+
+    _addEvent(event);
+  }
+
+  /// Handles a Volume Change event on this track immediately.
+  /// The event will not be added to this track's events.
+  void addVolume({ double volume }) {
+    final nextBeat = sequence.getBeat();
+    final event = VolumeEvent(beat: nextBeat, volume: volume);
+
+    _addEvent(event);
+  }
+
+  /// Handles a midi event on this track immediately.
+  /// The event will not be added to this track's events.
+  void addMidiEvent({ int status, int data1, int data2, int channel }) {
+    final nextBeat = sequence.getBeat();
+    final event = MidiEvent(beat: nextBeat, midiStatus: status, midiData1: data1,  midiData2: data2, midiChannel: channel);
+
+    _addEvent(event);
+  }
+
+  /// Handles a list of events on this track immediately.
+  /// The event will not be added to this track's events.
+  void sendEvents() {
+    //final nextBeat = sequence.getBeat();
+    NativeBridge.handleEventsNow(id, events, Sequence.globalState.sampleRate, sequence.tempo);
+    clearEvents();
+  }
+
   /// Adds a Note On and Note Off event to this track.
   /// This does not sync the events to the backend.
   void addNote({ int noteNumber, double velocity, double startBeat, double durationBeats }) {
