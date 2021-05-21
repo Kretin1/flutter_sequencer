@@ -52,3 +52,41 @@ func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int
     result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch1, 0, 0)
     assert(result == noErr, "Patch could not be changed")
 }
+
+func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
+        
+    if !isGraphInitialized() {
+        fatalError("initialize graph first")
+    }
+        
+    //let channel = UInt32(0)
+    var enabled = UInt32(1)
+    var result = AudioUnitSetProperty(
+        avAudioUnit,
+        AudioUnitPropertyID(kAUMIDISynthProperty_EnablePreload),
+        AudioUnitScope(kAudioUnitScope_Global),
+        0,
+        &enabled,
+        UInt32(sizeof(UInt32)))
+    //AudioUtils.CheckError(status)
+    assert(result == noErr, "Preload could not be enabled")
+    
+    for (index, element) in patches.enumerated() {
+        //print(index, ":", element)
+        let channel = UInt32(index)
+        let patch = UInt32(element)
+        let pcCommand = UInt32(0xC0 | channel)
+        result = MusicDeviceMIDIEvent(self.midisynthUnit, pcCommand, patch, 0, 0)
+        assert(result == noErr, "Patch could not be preloaded")
+    }
+        
+    enabled = UInt32(0)
+    result = AudioUnitSetProperty(
+        avAudioUnit,
+        AudioUnitPropertyID(kAUMIDISynthProperty_EnablePreload),
+        AudioUnitScope(kAudioUnitScope_Global),
+        0,
+        &enabled,
+        UInt32(sizeof(UInt32)))
+    assert(result == noErr, "Preload could not be disabled")
+}

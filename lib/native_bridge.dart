@@ -163,6 +163,17 @@ class NativeBridge {
     return singleResponseFuture<int>((port) => nAddTrackSf2(filenameUtf8Ptr, isAsset ? 1 : 0, patchNumber, port.nativePort));
   }
 
+  static Future<void> preloadPatches(int trackIndex, List<int> patches) async {
+    if (Platform.isAndroid) return -1;
+
+    final args = <String, dynamic>{
+      'track': trackIndex,
+      'patches': patches,
+    };
+
+    return await _channel.invokeMethod('preloadPatches', args);
+  }
+
   static Future<int> addTrackAudioUnit(String id) async {
     if (Platform.isAndroid) return -1;
 

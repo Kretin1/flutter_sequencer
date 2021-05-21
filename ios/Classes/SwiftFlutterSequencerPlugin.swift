@@ -45,6 +45,10 @@ public class SwiftFlutterSequencerPlugin: NSObject, FlutterPlugin {
         } else if (call.method == "addTrackAudioUnit") {
             let audioUnitId = (call.arguments as AnyObject)["id"] as! String
             addTrackAudioUnit(audioUnitId) { result($0) }
+        } else if (call.method == "preloadPatches") {
+            let trackIndex = (call.arguments as AnyObject)["track"] as! track_index_id
+            let patches = (call.arguments as AnyObject)["patches"] as! [UInt32]
+            preloadPatches(trackIndex, patches) { result($0) }
         }
     }
 }
@@ -143,6 +147,11 @@ func addTrackSf2(path: UnsafePointer<CChar>, isAsset: Bool, presetIndex: Int32, 
     plugin.engine!.addTrackSf2(sf2Path: String(cString: path), isAsset: isAsset, presetIndex: presetIndex) { trackIndex in
         callbackToDartInt32(callbackPort, trackIndex)
     }
+}
+
+// Called from method channel
+func preloadPatches(trackIndex: track_index_t, patches: [UInt32] ) -> Void {
+    plugin.engine!.preloadPatches(trackIndex: trackIndex, patches: patches)
 }
 
 // Called from method channel

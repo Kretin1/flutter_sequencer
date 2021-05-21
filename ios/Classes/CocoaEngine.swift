@@ -135,6 +135,11 @@ public class CocoaEngine {
         }
     }
     
+    func preloadPatches(trackIndex: track_index_t, patches: [UInt32]) -> Void {
+        let avAudioUnitToLoad = getAvAudioUnits()[trackIndex]
+        loadPatches(avAudioUnit: avAudioUnitToLoad, patches: patches)
+    }
+    
     func addTrackAudioUnit(audioUnitId: String, completion: @escaping (Int32) -> Void) {
         let trackIndex = SchedulerAddTrack(self.scheduler)
 

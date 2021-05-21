@@ -77,7 +77,8 @@ void CocoaScheduler::handleEvent(track_index_t trackIndex, SchedulerEvent event,
         auto midiEvent = MidiEventData(event.data);
 
         // printf("Handing midi event at: %i on track %i, status: %i, data1: %i, data2: %i, offsetFrame: %i\n", getPosition(), trackIndex, midiEvent.midiStatus, midiEvent.midiData1, midiEvent.midiData2, offsetFrame);
-        MusicDeviceMIDIEvent(trackAU, midiEvent.midiStatus, midiEvent.midiData1, midiEvent.midiData2, scaledOffsetFrame);
+        UInt32 status =  midiEvent.midiStatus | midiEvent.channel;
+        MusicDeviceMIDIEvent(trackAU, status, midiEvent.midiData1, midiEvent.midiData2, scaledOffsetFrame);
     }
 }
 
