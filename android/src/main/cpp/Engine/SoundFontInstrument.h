@@ -26,7 +26,8 @@ public:
             mTsf = tsf_load_filename(path);
         }
 
-        tsf_set_output(mTsf, isStereo ? TSF_STEREO_INTERLEAVED : TSF_MONO, sampleRate);
+        tsf_set_output(mTsf, isStereo ? TSF_STEREO_INTERLEAVED : TSF_MONO, sampleRate, -1.0f);
+        tsf_set_max_voices(mTsf, 256);
     }
 
     ~SoundFontInstrument() {
@@ -44,7 +45,7 @@ public:
         }
         else if (status == 0x90) {
             // Note On
-            tsf_channel_note_on(mTsf, channel, data1, data2 / 127.0f);
+            tsf_channel_note_on(mTsf, channel, data1, pow(data2 / 127.0,2));
             //tsf_note_on(mTsf, presetIndex, data1, data2 / 255.0);
         }
         else if (status == 0x80) {
