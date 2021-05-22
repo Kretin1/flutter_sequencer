@@ -296,3 +296,10 @@ class Track {
     return (velocity * 127).round();
   }
 }
+
+class Patch
+{
+  int bank;
+  int patch;
+  Patch({int bank = 0, int patch = 0});
+}

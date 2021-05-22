@@ -135,9 +135,14 @@ public class CocoaEngine {
         }
     }
     
-    func preloadPatches(trackIndex: track_index_t, patches: [UInt32]) -> Void {
-        let avAudioUnitToLoad = getAvAudioUnits()[trackIndex]
-        loadPatches(avAudioUnit: avAudioUnitToLoad, patches: patches)
+    func preloadPatches(trackIndex: Int32, patches: [UInt32], completion: @escaping (Bool) -> Void) {
+        if let avAudioUnitToLoad = getAvAudioUnits()[trackIndex] {
+            loadPatches(avAudioUnit: avAudioUnitToLoad, patches: patches)
+            completion(true)
+        } else {
+            print("AVAudioUnit not found")
+            completion(false)
+        }
     }
     
     func addTrackAudioUnit(audioUnitId: String, completion: @escaping (Int32) -> Void) {

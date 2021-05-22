@@ -55,38 +55,50 @@ func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int
 
 func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
         
-    if !isGraphInitialized() {
-        fatalError("initialize graph first")
-    }
+//    if !isGraphInitialized() {
+//        fatalError("initialize graph first")
+//    }
+    let audioUnit = avAudioUnit.audioUnit
         
     //let channel = UInt32(0)
     var enabled = UInt32(1)
     var result = AudioUnitSetProperty(
-        avAudioUnit,
+        audioUnit,
         AudioUnitPropertyID(kAUMIDISynthProperty_EnablePreload),
         AudioUnitScope(kAudioUnitScope_Global),
         0,
         &enabled,
-        UInt32(sizeof(UInt32)))
+        UInt32(MemoryLayout.size(ofValue: enabled)))
     //AudioUtils.CheckError(status)
     assert(result == noErr, "Preload could not be enabled")
     
     for (index, element) in patches.enumerated() {
         //print(index, ":", element)
         let channel = UInt32(index)
-        let patch = UInt32(element)
+        
+        var p = element
+        var bank = UInt32(0)
+        if (element > 127) {
+            bank = UInt32(element / 128)
+            p = element - (bank * 128)
+        }
+        let bankSelectCommand = UInt32(0xB0 | channel)
+        result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, bank, 0, 0)
+        assert(result == noErr, "Bank could not be preloaded")
+        
+        let patch = UInt32(p)
         let pcCommand = UInt32(0xC0 | channel)
-        result = MusicDeviceMIDIEvent(self.midisynthUnit, pcCommand, patch, 0, 0)
+        result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch, 0, 0)
         assert(result == noErr, "Patch could not be preloaded")
     }
         
     enabled = UInt32(0)
     result = AudioUnitSetProperty(
-        avAudioUnit,
+        audioUnit,
         AudioUnitPropertyID(kAUMIDISynthProperty_EnablePreload),
         AudioUnitScope(kAudioUnitScope_Global),
         0,
         &enabled,
-        UInt32(sizeof(UInt32)))
+        UInt32(MemoryLayout.size(ofValue: enabled)))
     assert(result == noErr, "Preload could not be disabled")
 }

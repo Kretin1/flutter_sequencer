@@ -70,6 +70,28 @@ class Sequence {
     }
   }
 
+  /// Preloads patches for SF2 instruments
+  Future<void> preloadPatches(List<Patch> patches) async {
+
+    List<int> trackPatches = [];
+    for (var i = 0; i < patches.length; i++) {
+      int patch = patches[i].patch + (patches[i].bank * 128);
+      trackPatches.add(patch);
+    }
+
+    List<Track> tracks = getTracks();
+    for (var i = 0; i < tracks.length; i++) {
+      int id = tracks[i].id;
+      int start = i * 16;
+      int end = (i + 1) * 16;
+      if (end > patches.length)
+        end = tracks.length;
+
+      List<int> thisP = trackPatches.sublist(start, end);
+      await NativeBridge.preloadPatches(id, thisP);
+    }
+  }
+
   /// Removes a track from the underlying sequencer engine.
   List<Track> deleteTrack(Track track) {
     final keysToRemove = [];
