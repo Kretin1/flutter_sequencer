@@ -73,17 +73,21 @@ func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
     assert(result == noErr, "Preload could not be enabled")
     
     for (index, element) in patches.enumerated() {
-        //print(index, ":", element)
+        //print("preload ", index, ":", element)
         let channel = UInt32(index)
         
         var p = element
         var bank = UInt32(0)
         if (element > 127) {
             bank = UInt32(element / 128)
-            p = element - (bank * 128)
+            if (bank == 120) {
+                bank = UInt32(kAUSampler_DefaultPercussionBankMSB)
+            }
+            p = element % 128
         }
+        print("preload ", index, ": ", bank, ":", p)
         let bankSelectCommand = UInt32(0xB0 | channel)
-        result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, bank, 0, 0)
+        result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, 0, bank, 0)
         assert(result == noErr, "Bank could not be preloaded")
         
         let patch = UInt32(p)
