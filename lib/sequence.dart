@@ -32,7 +32,13 @@ class Sequence {
   /// Call this to remove this sequence and its tracks from the global sequencer
   /// engine.
   void destroy() {
-    _tracks.values.forEach((track) => deleteTrack(track));
+
+    // _tracks.values.forEach((track) => deleteTrack(track));
+    _tracks.values.forEach((track) {
+      NativeBridge.removeTrack(track.id);
+    });
+    _tracks.clear();
+
     globalState.unregisterSequence(this);
   }
   
@@ -71,8 +77,10 @@ class Sequence {
   }
 
   /// Preloads patches for SF2 instruments
-  Future<void> preloadPatches(List<Patch> patches) async {
+  Future<bool> preloadPatches(List<Patch> patches) async {
 
+    bool result = false;
+    // Create a single list of patches
     List<int> trackPatches = [];
     for (var i = 0; i < patches.length; i++) {
       int patch = patches[i].patch + (patches[i].bank * 128);
@@ -85,11 +93,14 @@ class Sequence {
       int start = i * 16;
       int end = (i + 1) * 16;
       if (end > patches.length)
-        end = tracks.length;
+        end = patches.length;
 
+      //print('Start $start end $end length ${tracks.length}');
       List<int> thisP = trackPatches.sublist(start, end);
-      await NativeBridge.preloadPatches(id, thisP);
+      print('Adding ${thisP.length} patches to track $id');
+      result = await NativeBridge.preloadPatches(id, thisP);
     }
+    return result;
   }
 
   /// Removes a track from the underlying sequencer engine.

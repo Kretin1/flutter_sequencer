@@ -301,5 +301,5 @@ class Patch
 {
   int bank;
   int patch;
-  Patch({int bank = 0, int patch = 0});
+  Patch({this.bank = 0, this.patch = 0});
 }
