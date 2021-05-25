@@ -88,8 +88,8 @@ class Sequence {
     }
 
     List<Track> tracks = getTracks();
-    for (var i = 0; i < tracks.length; i++) {
-      int id = tracks[i].id;
+    for (var i = 0; i < tracks.length - 1; i++) {
+      int id = tracks[i+1].id; // allow for the first piano track
       int start = i * 16;
       int end = (i + 1) * 16;
       if (end > patches.length)

@@ -7,6 +7,21 @@ func isAppleSampler(component: AVAudioUnitComponent) -> Bool {
     return isApple && isMIDISynth
 }
 
+func getSoundFontURL(avAudioUnit: AVAudioUnit) -> CFString {
+    let audioUnit = avAudioUnit.audioUnit
+    var size: UInt32 = UInt32(MemoryLayout<CFString>.size)
+    var url = "" as CFString
+    
+    var result = AudioUnitGetProperty(audioUnit,
+                                 AudioUnitPropertyID(kMusicDeviceProperty_SoundBankURL),
+                                 AudioUnitScope(kAudioUnitScope_Global),
+                                 0,
+                                 &url,
+                                 &size)
+    assert(result == noErr, "Could not get SoundFont url")
+    return url
+}
+
 func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int32) {
     let audioUnit = avAudioUnit.audioUnit
     var mutableSoundFontURL = soundFontURL
@@ -19,6 +34,7 @@ func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int
                                  &mutableSoundFontURL,
                                  UInt32(MemoryLayout.size(ofValue: mutableSoundFontURL)))
     assert(result == noErr, "SoundFont could not be loaded")
+    print(soundFontURL, " loaded")
 
     var enabled = UInt32(1)
     
@@ -74,7 +90,7 @@ func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
     
     for (index, element) in patches.enumerated() {
         //print("preload ", index, ":", element)
-        let channel = UInt32(index)
+        let channel = UInt32(0)
         
         var p = element
         var bank = UInt32(0)
@@ -85,15 +101,19 @@ func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
             }
             p = element % 128
         }
-        print("preload ", index, ": ", bank, ":", p)
-        let bankSelectCommand = UInt32(0xB0 | channel)
-        result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, 0, bank, 0)
-        assert(result == noErr, "Bank could not be preloaded")
-        
-        let patch = UInt32(p)
-        let pcCommand = UInt32(0xC0 | channel)
-        result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch, 0, 0)
-        assert(result == noErr, "Patch could not be preloaded")
+        if (bank == 0 && element == 0) {
+            print("Skipping 0:0")
+        } else {
+            print("preload ", index, ": ", bank, ":", p)
+            let bankSelectCommand = UInt32(0xB0 | channel)
+            result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, 0, bank, 0)
+            assert(result == noErr, "Bank could not be preloaded")
+            
+            let patch = UInt32(p)
+            let pcCommand = UInt32(0xC0 | channel)
+            result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch, 0, 0)
+            assert(result == noErr, "Patch could not be preloaded")
+        }
     }
         
     enabled = UInt32(0)

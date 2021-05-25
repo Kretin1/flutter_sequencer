@@ -13,6 +13,9 @@ public class CocoaEngine {
     // Swift Dictionary is not thread-safe, so this must be copied before access
     private var unsafeAvAudioUnits: [track_index_t: AVAudioUnit] = [:]
     
+    // channel reassignment
+    // private var channelAssignment: [(track: UInt32, channel: UInt32)] = []
+    
     public init(sampleRateCallbackPort: Dart_Port, registrar: FlutterPluginRegistrar) {
         outputFormat = engine.outputNode.outputFormat(forBus: 0)
         
@@ -137,6 +140,15 @@ public class CocoaEngine {
     
     func preloadPatches(trackIndex: Int32, patches: [UInt32], completion: @escaping (Bool) -> Void) {
         if let avAudioUnitToLoad = getAvAudioUnits()[trackIndex] {
+            
+            // create tracks to accommodate < 16 channels per track
+//            if (patches.count > 15) {
+//                let trackCount = patches.count / 15
+//                if (unsafeAvAudioUnits.count < trackCount) {
+//
+//                }
+//            }
+            
             loadPatches(avAudioUnit: avAudioUnitToLoad, patches: patches)
             completion(true)
         } else {
@@ -144,6 +156,8 @@ public class CocoaEngine {
             completion(false)
         }
     }
+    
+    
     
     func addTrackAudioUnit(audioUnitId: String, completion: @escaping (Int32) -> Void) {
         let trackIndex = SchedulerAddTrack(self.scheduler)
