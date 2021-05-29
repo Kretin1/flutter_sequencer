@@ -26,7 +26,7 @@ public:
             mTsf = tsf_load_filename(path);
         }
 
-        tsf_set_output(mTsf, isStereo ? TSF_STEREO_INTERLEAVED : TSF_MONO, sampleRate, -1.0f);
+        tsf_set_output(mTsf, isStereo ? TSF_STEREO_INTERLEAVED : TSF_MONO, sampleRate, -2.0f);
         tsf_set_max_voices(mTsf, 256);
     }
 
