@@ -143,6 +143,13 @@ extern "C" {
     }
 
     __attribute__((visibility("default"))) __attribute__((used))
+    void set_track_gain(track_index_t trackIndex, float volume) {
+        check_engine();
+
+        return engine->mSchedulerMixer.setGain(trackIndex, volume);
+    }
+
+    __attribute__((visibility("default"))) __attribute__((used))
     float get_track_volume(track_index_t trackIndex) {
         check_engine();
 

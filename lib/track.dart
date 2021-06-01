@@ -88,6 +88,11 @@ class Track {
     clearEvents();
   }
 
+  /// Sets the gain of the track.
+  void setGain(double level) {
+    NativeBridge.setTrackGain(id, level);
+  }
+
   /// Adds a Note On and Note Off event to this track.
   /// This does not sync the events to the backend.
   void addNote({ int noteNumber, double velocity, double startBeat, double durationBeats }) {

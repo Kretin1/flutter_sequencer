@@ -56,6 +56,10 @@ final nGetPosition = nativeLib.lookupFunction<
   Uint32 Function(),
   int Function()>('get_position');
 
+final nSetTrackGain = nativeLib.lookupFunction<
+    Void Function(Int32, Float),
+    void Function(int, double)>('set_track_gain');
+
 final nGetTrackVolume = nativeLib.lookupFunction<
   Float Function(Int32),
   double Function(int)>('get_track_volume');
@@ -194,6 +198,10 @@ class NativeBridge {
 
   static int getPosition() {
     return nGetPosition();
+  }
+
+  static void setTrackGain(int trackIndex, double level) {
+    nSetTrackGain(trackIndex, level);
   }
 
   static double getTrackVolume(int trackIndex) {

@@ -38,6 +38,10 @@ public:
         tsf_render_float(mTsf, audioData, numFrames);
     }
 
+    void setGain(float volume) override {
+        tsf_set_volume(mTsf, volume);
+    }
+
     void handleMidiEvent(uint8_t status, uint8_t data1, uint8_t data2, uint8_t channel) override {
         if (status == 0xC0) {
             // Program Change

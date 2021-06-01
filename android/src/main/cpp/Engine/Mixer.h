@@ -124,6 +124,15 @@ public:
         }
     }
 
+    void setGain(track_index_t trackIndex, float level) {
+        auto maybeTrackInfo = getTrackInfo(trackIndex);
+
+        if (maybeTrackInfo.has_value()) {
+            TrackInfo nextTrackInfo = maybeTrackInfo.value();
+            nextTrackInfo.track->setGain(level);
+        }
+    }
+
     void setLevel(track_index_t trackIndex, float level) {
         auto maybeTrackInfo = getTrackInfo(trackIndex);
 
@@ -141,6 +150,7 @@ public:
             TrackInfo nextTrackInfo = maybeTrackInfo.value();
             return nextTrackInfo.level;
         }
+        return 0;
     }
 
     int32_t getChannelCount() { return mChannelCount; }

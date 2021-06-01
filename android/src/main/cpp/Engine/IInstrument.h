@@ -25,6 +25,7 @@ class IInstrument: public IRenderableAudio {
 public:
     virtual void handleMidiEvent(uint8_t status, uint8_t data1, uint8_t data2, uint8_t channel) = 0;
 
+    virtual void setGain(float volume) = 0;
     // reset() should reset any state. It does not need to shut off all the MIDI notes, since
     // BaseScheduler handles that.
     virtual void reset() = 0;
