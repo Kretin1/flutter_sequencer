@@ -102,6 +102,21 @@ class Sequence {
     }
     return result;
   }
+  Future<bool> preloadTrackPatches(int trackIndex, List<Patch> patches) async {
+
+    bool result = false;
+    // Create a single list of patch ints
+    List<int> trackPatches = [];
+    for (var i = 0; i < patches.length; i++) {
+      int patch = patches[i].patch + (patches[i].bank * 128);
+      trackPatches.add(patch);
+    }
+
+    List<Track> tracks = getTracks();
+    int id = tracks[trackIndex].id;
+    result = await NativeBridge.preloadPatches(id, trackPatches);
+    return result;
+  }
 
   /// Removes a track from the underlying sequencer engine.
   List<Track> deleteTrack(Track track) {

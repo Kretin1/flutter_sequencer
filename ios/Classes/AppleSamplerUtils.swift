@@ -101,19 +101,20 @@ func loadPatches(avAudioUnit: AVAudioUnit, patches: [UInt32]) {
             }
             p = element % 128
         }
-        if (bank == 0 && element == 0) {
-            print("Skipping 0:0")
-        } else {
-            print("preload ", index, ": ", bank, ":", p)
-            let bankSelectCommand = UInt32(0xB0 | channel)
-            result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, 0, bank, 0)
-            assert(result == noErr, "Bank could not be preloaded")
-            
-            let patch = UInt32(p)
-            let pcCommand = UInt32(0xC0 | channel)
-            result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch, 0, 0)
-            assert(result == noErr, "Patch could not be preloaded")
-        }
+//        if (bank == 0 && element == 0) {
+//            print("Skipping 0:0")
+//        } else {
+//
+//        }
+        print("preload ", index, ": ", bank, ":", p)
+        let bankSelectCommand = UInt32(0xB0 | channel)
+        result = MusicDeviceMIDIEvent(audioUnit, bankSelectCommand, 0, bank, 0)
+        assert(result == noErr, "Bank could not be preloaded")
+        
+        let patch = UInt32(p)
+        let pcCommand = UInt32(0xC0 | channel)
+        result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch, 0, 0)
+        assert(result == noErr, "Patch could not be preloaded")
     }
         
     enabled = UInt32(0)
