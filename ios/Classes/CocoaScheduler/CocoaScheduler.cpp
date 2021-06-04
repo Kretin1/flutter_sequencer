@@ -86,6 +86,24 @@ void CocoaScheduler::handleEvent(track_index_t trackIndex, SchedulerEvent event,
     }
 }
 
+void CocoaScheduler::setTrackVolume(track_index_t trackIndex, Float32 volume) {
+    //float volume;
+    auto osStatus = AudioUnitSetParameter(mMixerAudioUnit,
+                                          kMultiChannelMixerParam_Volume,
+                                          kAudioUnitScope_Input,
+                                          trackIndex, // bus ID
+                                          volume,
+                                          0);
+    
+    if (osStatus == noErr) {
+        //printf("Set volume of track %i to %g", trackIndex, volume);
+        //return volume;
+    } else {
+        //printf("Error setting volume of track %i to %g", trackIndex, volume);
+        //return 0.0;
+    }
+}
+
 float CocoaScheduler::getTrackVolume(track_index_t trackIndex) {
     float volume;
     auto osStatus = AudioUnitGetParameter(mMixerAudioUnit,
@@ -188,6 +206,10 @@ UInt32 SchedulerGetPosition(const void* scheduler) {
 
 UInt64 SchedulerGetLastRenderTimeUs(const void* scheduler) {
     return ((CocoaScheduler*)scheduler)->getLastRenderTimeUs();
+}
+
+void SchedulerSetTrackVolume(const void* scheduler, track_index_t trackIndex, Float32 volume) {
+    return ((CocoaScheduler*)scheduler)->setTrackVolume(trackIndex, volume);
 }
 
 Float32 SchedulerGetTrackVolume(const void* scheduler, track_index_t trackIndex) {

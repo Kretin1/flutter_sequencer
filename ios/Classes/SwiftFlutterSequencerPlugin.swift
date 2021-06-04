@@ -173,6 +173,11 @@ func getPosition() -> position_frame_t {
     return SchedulerGetPosition(plugin.engine!.scheduler)
 }
 
+@_cdecl("set_track_gain")
+func setTrackVolume(trackIndex: track_index_t, volume: Float32) {
+    SchedulerSetTrackVolume(plugin.engine!.scheduler, trackIndex, volume)
+}
+
 @_cdecl("get_track_volume")
 func getTrackVolume(trackIndex: track_index_t) -> Float32 {
     return SchedulerGetTrackVolume(plugin.engine!.scheduler, trackIndex)

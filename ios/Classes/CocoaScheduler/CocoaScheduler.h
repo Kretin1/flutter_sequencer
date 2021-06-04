@@ -22,6 +22,7 @@ public:
     void onResetTrack(track_index_t trackIndex);
     void handleRenderAudioRange(track_index_t trackIndex, uint32_t offsetFrame, uint32_t numFramesToRender);
     void handleEvent(track_index_t trackIndex, SchedulerEvent event, position_frame_t offsetFrame);
+    void setTrackVolume(track_index_t trackIndex, Float32 volume);
     float getTrackVolume(track_index_t trackIndex);
     int scaleFrames(track_index_t trackIndex, UInt32 inNumberFrames, bool isToDeviceFrames);
 private:
@@ -60,6 +61,7 @@ void SchedulerPause(const void* _Nonnull engine);
 void SchedulerResetTrack(const void* _Nonnull engine, track_index_t trackIndex);
 UInt32 SchedulerGetPosition(const void* _Nonnull engine);
 UInt64 SchedulerGetLastRenderTimeUs(const void* _Nonnull engine);
+void SchedulerSetTrackVolume(const void* _Nonnull engine, track_index_t trackIndex, Float32 volume);
 Float32 SchedulerGetTrackVolume(const void* _Nonnull engine, track_index_t trackIndex);
 #ifdef __cplusplus
 }

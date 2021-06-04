@@ -12,7 +12,7 @@ func getSoundFontURL(avAudioUnit: AVAudioUnit) -> CFString {
     var size: UInt32 = UInt32(MemoryLayout<CFString>.size)
     var url = "" as CFString
     
-    var result = AudioUnitGetProperty(audioUnit,
+    let result = AudioUnitGetProperty(audioUnit,
                                  AudioUnitPropertyID(kMusicDeviceProperty_SoundBankURL),
                                  AudioUnitScope(kAudioUnitScope_Global),
                                  0,
