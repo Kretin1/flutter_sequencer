@@ -1,3 +1,7 @@
+## Multi-channel SF2
+
+This fork provides support for multi-channel SF2 instruments and sending multiple midi events at a time
+
 # flutter_sequencer
 
 This Flutter plugin lets you set up sampler instruments and create multi-track sequences of notes
