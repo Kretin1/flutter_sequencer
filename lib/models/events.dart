@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-
 const SCHEDULER_EVENT_SIZE = 16;
 const SCHEDULER_EVENT_DATA_OFFSET = 8;
 const MIDI_STATUS_NOTE_ON = 144;
@@ -16,8 +14,8 @@ abstract class SchedulerEvent {
   static const VOLUME_EVENT = 1;
 
   SchedulerEvent({
-    @required this.beat,
-    @required this.type,
+    required this.beat,
+    required this.type,
   });
 
   double beat;
@@ -38,11 +36,13 @@ abstract class SchedulerEvent {
 /// Describes an event that will trigger a MIDI event.
 class MidiEvent extends SchedulerEvent {
   MidiEvent({
-    @required double beat,
-    @required this.midiStatus,
-    @required this.midiData1,
-    @required this.midiData2,
+
+    required double beat,
+    required this.midiStatus,
+    required this.midiData1,
+    required this.midiData2,
     this.midiChannel = 0,
+
   }) : super(beat: beat, type: SchedulerEvent.MIDI_EVENT);
 
   final int midiStatus;
@@ -63,9 +63,10 @@ class MidiEvent extends SchedulerEvent {
   }
 
   static MidiEvent ofNoteOn({
-    @required double beat,
-    @required int noteNumber,
-    @required int velocity,
+
+    required double beat,
+    required int noteNumber,
+    required int velocity,
     int channel = 0,
   }) {
     if (velocity > 127 || velocity < 0) throw 'Velocity must be in range 0-127';
@@ -80,8 +81,9 @@ class MidiEvent extends SchedulerEvent {
   }
 
   static MidiEvent ofNoteOff({
-    @required double beat,
-    @required int noteNumber,
+
+    required double beat,
+    required int noteNumber,
     int channel = 0,
   }) {
     return MidiEvent(
@@ -97,11 +99,11 @@ class MidiEvent extends SchedulerEvent {
 /// Describes an event that will trigger a volume change.
 class VolumeEvent extends SchedulerEvent {
   VolumeEvent({
-    @required double beat,
-    @required this.volume,
+    required double beat,
+    required this.volume,
   }) : super(beat: beat, type: SchedulerEvent.VOLUME_EVENT);
 
-  final double volume;
+  final double? volume;
 
   VolumeEvent withFrame(int frame) {
     return VolumeEvent(
@@ -114,7 +116,7 @@ class VolumeEvent extends SchedulerEvent {
   ByteData serializeBytes(int sampleRate, double beat, int correctionFrames) {
     final data = super.serializeBytes(sampleRate, beat, correctionFrames);
 
-    data.setFloat32(SCHEDULER_EVENT_DATA_OFFSET, volume, Endian.host);
+    data.setFloat32(SCHEDULER_EVENT_DATA_OFFSET, volume!, Endian.host);
 
     return data;
   }
