@@ -57,7 +57,7 @@ void CocoaScheduler::handleRenderAudioRange(track_index_t trackIndex, uint32_t o
     // Don't need to manually render frames, AVAudioEngine takes care of that
 };
 
-void CocoaScheduler::handleEvent(track_index_t trackIndex, SchedulerEvent event, UInt32 offsetFrame) {
+void CocoaScheduler::handleEvent(track_index_t trackIndex, SchedulerEvent event, position_frame_t offsetFrame) {
     AudioUnit trackAU = mAudioUnitMap[trackIndex];
     auto scaledOffsetFrame = scaleFrames(trackIndex, offsetFrame, false);
     
@@ -160,7 +160,7 @@ void DestroyScheduler(void* scheduler) {
     delete ((CocoaScheduler*)scheduler);
 }
 
-track_index_t SchedulerAddTrack(const void* scheduler) {
+SInt32 SchedulerAddTrack(const void* scheduler) {
     return ((CocoaScheduler*)scheduler)->addTrack();
 }
 
