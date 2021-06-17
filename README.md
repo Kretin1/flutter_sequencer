@@ -1,6 +1,10 @@
 ## Multi-channel SF2
 
-This fork provides support for multi-channel SF2 instruments and sending multiple midi events at a time
+This fork provides support for multi-channel SF2 instruments and sending multiple midi events at a time for the purpose of playing midi files.
+
+Parsing and timing the events is currently handled in Flutter.
+
+It's working, but is a work in progress.
 
 # flutter_sequencer
 
