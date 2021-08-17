@@ -344,12 +344,12 @@ class Sequence {
   /// {@macro flutter_sequencer_library_private}
   /// Pauses this sequence if it is at its end.
   void checkIsOver() {
-    if (isPlaying && getIsOver()) {
-      // Sequence is at end, pause
-
-      pauseBeat = endBeat;
-      pause();
-    }
+    // if (isPlaying && getIsOver()) {
+    //   // Sequence is at end, pause
+    //
+    //   pauseBeat = endBeat;
+    //   pause();
+    // }
   }
 
   /// Number of frames elapsed since the sequence was started. Does not account

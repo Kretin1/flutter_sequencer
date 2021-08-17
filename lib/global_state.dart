@@ -135,12 +135,12 @@ class GlobalState {
     // All sequences were paused, play engine
     if (!keepEngineRunning) NativeBridge.play();
 
-    if (_topOffTimer != null) _topOffTimer!.cancel();
-    _topOffTimer = Timer.periodic(Duration(milliseconds: 1000), (_) {
-      _topOffAllBuffers();
-
-      sequenceIdMap.values.forEach((sequence) => sequence.checkIsOver());
-    });
+    // if (_topOffTimer != null) _topOffTimer!.cancel();
+    // _topOffTimer = Timer.periodic(Duration(milliseconds: 1000), (_) {
+    //   _topOffAllBuffers();
+    //
+    //   sequenceIdMap.values.forEach((sequence) => sequence.checkIsOver());
+    // });
   }
 
   void _pauseEngine() {
