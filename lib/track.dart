@@ -288,7 +288,14 @@ class Track {
           return -1;
         } else if (eventA.midiData1 == eventB.midiData1 && eventA.midiStatus == MIDI_STATUS_NOTE_ON && eventB.midiStatus == MIDI_STATUS_NOTE_OFF) {
           return 1;
-        } else {
+        }
+        else if (eventA.midiStatus == 0xB0 && eventB.midiStatus != 0xB0) {
+          return -1;
+        }
+        else if (eventB.midiStatus == 0xB0 && eventA.midiStatus != 0xB0) {
+          return 1;
+        }
+        else {
           return 0;
         }
       } else {
