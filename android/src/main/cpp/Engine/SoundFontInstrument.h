@@ -61,6 +61,9 @@ public:
             // Control
             tsf_channel_midi_control(mTsf, channel, data1, data2);
         }
+        else if (status == 0xE0) {
+            tsf_channel_set_pitchwheel(mTsf, channel, data1);
+        }
     }
 
     void reset() override {
