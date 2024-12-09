@@ -49,8 +49,14 @@ public class SwiftFlutterSequencerPlugin: NSObject, FlutterPlugin {
             let trackIndex = (call.arguments as AnyObject)["track"] as! Int32
             let patches = (call.arguments as AnyObject)["patches"] as! [UInt32]
             preloadPatches(trackIndex: trackIndex, patches: patches) { result($0) }
+        } else if (call.method == "never") {
+            preventStripping();
         }
     }
+}
+
+func preventStripping() {
+    RegisterDart_PostCObject(nil)
 }
 
 // Called from method channel
