@@ -163,6 +163,11 @@ class Sequence {
   void stop() {
     pause();
     setBeat(0.0);
+    _tracks.values.forEach((track) {
+      List.generate(128, (noteNumber) {
+        track.stopNoteNow(noteNumber: noteNumber);
+      });
+    });
   }
 
   /// Sets the tempo.
@@ -275,7 +280,7 @@ class Sequence {
 
   /// Returns true if the sequence is at its end beat.
   bool getIsOver() {
-    return getBeat(false) == endBeat;
+    return _getFrame(true) == beatToFrames(endBeat);
   }
 
   /// Gets the current beat. Returns a value based on the number of frames
