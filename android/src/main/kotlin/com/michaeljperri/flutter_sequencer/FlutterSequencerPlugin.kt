@@ -11,6 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+//import java.util.Collections.emptyList
 
 /** FlutterSequencerPlugin */
 public class FlutterSequencerPlugin: FlutterPlugin, MethodCallHandler {
@@ -67,7 +68,8 @@ public class FlutterSequencerPlugin: FlutterPlugin, MethodCallHandler {
 
       result.success(paths)
     } else if (call.method == "listAudioUnits") {
-      result.success(emptyList<String>())
+      result.success(
+        emptyList<String>())
     } else {
       result.notImplemented()
     }
